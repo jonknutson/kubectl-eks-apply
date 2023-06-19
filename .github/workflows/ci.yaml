@@ -23,6 +23,7 @@ jobs:
 
       - name: Build and tag images
         run: |
+          echo "Logging into ghcr.io with user $$GITHUB_REPOSITORY_OWNER"
           docker login ghcr.io --username $GITHUB_REPOSITORY_OWNER --password $CR_TOKEN
           docker build -t $REGISTRY/$GITHUB_REPOSITORY:$GITHUB_SHA .
           docker tag $REGISTRY/$GITHUB_REPOSITORY:$GITHUB_SHA $REGISTRY/$GITHUB_REPOSITORY:latest
