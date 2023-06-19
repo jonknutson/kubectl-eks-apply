@@ -18,6 +18,9 @@ jobs:
       REGISTRY: ghcr.io
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
       - name: Build and tag images
         run: |
           docker login ghcr.io --username $GITHUB_REPOSITORY_OWNER --password $CR_TOKEN
