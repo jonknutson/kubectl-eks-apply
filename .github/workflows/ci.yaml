@@ -15,29 +15,25 @@ jobs:
     runs-on: ubuntu-22.04
     env:
       CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      GITHUB_USER: ${{ env.GITHUB_REPOSITORY_OWNER }}
-      COMMIT_SHA: ${{ env.GITHUB_SHA }}
-      IMAGE_TAG: ${{ env.GITHUB_REF }}
       REGISTRY: ghcr.io
-      REPOSITORY: ${{ env.GITHUB_REPOSITORY }}
 
     steps:
       - name: Build and tag images
         run: |
           echo $CR_TOKEN | docker login ghcr.io -u $GITHUB_USER --password-stdin
-          docker build -t $$REGISTRY/$REPOSITORY:$COMMIT_SHA
-          docker tag $REGISTRY/$REPOSITORY:$COMMIT_SHA $REGISTRY/$REPOSITORY:latest
+          docker build -t $REGISTRY/$GITHUB_REPOSITORY:$GITHUB_SHA
+          docker tag $REGISTRY/$GITHUB_REPOSITORY:$GITHUB_SHA $REGISTRY/$GITHUB_REPOSITORY:latest
 
       - name: Add extra tags
-        if: ${{ GITHUB_REF_TYPE==tag }}
-        run: docker tag $REGISTRY/$REPOSITORY:$COMMIT_SHA $REGISTRY/$REPOSITORY:$IMAGE_TAG
+        if: github.ref_type == 'tag'
+        run: docker tag $REGISTRY/$GITHUB_REPOSITORY:$GITHUB_SHA $REGISTRY/$GITHUB_REPOSITORY:$GITHUB_REF_NAME
 
       - name: Push container
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run : |
-          docker push $REGISTRY/$REPOSITORY:$COMMIT_SHA
-          docker push $REGISTRY/$REPOSITORY:latest
+          docker push $REGISTRY/$GITHUB_REPOSITORY:$GITHUB_SHA
+          docker push $REGISTRY/$GITHUB_REPOSITORY:latest
 
       - name: Push extra tags
-        if: ${{ GITHUB_REF_TYPE==tag }}
-        run: docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+        if: github.ref_type == 'tag' && github.event_name == 'push'
+        run: docker push $REGISTRY/$GITHUB_REPOSITORY:$GITHUB_REF_NAME
