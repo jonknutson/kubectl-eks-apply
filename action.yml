@@ -1,0 +1,13 @@
+# action.yml
+name: 'kubectl-eks-apply'
+description: 'Apply all k8s manifest files on an EKS cluster'
+inputs:
+  files-to-apply:
+    description: "The file or files against which you want to run kubectl apply."
+    required: true
+    default: '*.yaml'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.files-to-apply }}
