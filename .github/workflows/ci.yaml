@@ -20,7 +20,7 @@ jobs:
     steps:
       - name: Build and tag images
         run: |
-          docker login ghcr.io -u $GITHUB_USER --password $CR_TOKEN
+          docker login ghcr.io --username $GITHUB_REPOSITORY_OWNER --password $CR_TOKEN
           docker build -t $REGISTRY/$GITHUB_REPOSITORY:$GITHUB_SHA
           docker tag $REGISTRY/$GITHUB_REPOSITORY:$GITHUB_SHA $REGISTRY/$GITHUB_REPOSITORY:latest
 
