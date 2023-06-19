@@ -40,4 +40,4 @@ jobs:
 
       - name: Push extra tags
         if: ${{ GITHUB_REF_TYPE==tag }}
-          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
+        run: docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
