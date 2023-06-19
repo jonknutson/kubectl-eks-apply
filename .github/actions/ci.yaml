@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - "main"
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - "main"
+
+jobs:
+  build:
+    name: Build Docker
+    runs-on: ubuntu-22.04
+    env:
+      CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_USER: ${{ env.GITHUB_REPOSITORY_OWNER }}
+      COMMIT_SHA: ${{ env.GITHUB_SHA }}
+      IMAGE_TAG: ${{ env.GITHUB_REF }}
+      REGISTRY: ghcr.io
+      REPOSITORY: ${{ env.GITHUB_REPOSITORY }}
+
+    steps:
+      - name: Build and tag images
+        run: |
+          echo $CR_TOKEN | docker login ghcr.io -u $GITHUB_USER --password-stdin
+          docker build -t $$REGISTRY/$REPOSITORY:$COMMIT_SHA
+          docker tag $REGISTRY/$REPOSITORY:$COMMIT_SHA $REGISTRY/$REPOSITORY:latest
+
+      - name: Add extra tags
+        if: ${{ GITHUB_REF_TYPE==tag }}
+        run: docker tag $REGISTRY/$REPOSITORY:$COMMIT_SHA $REGISTRY/$REPOSITORY:$IMAGE_TAG
+
+      - name: Push container
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run : |
+          docker push $REGISTRY/$REPOSITORY:$COMMIT_SHA
+          docker push $REGISTRY/$REPOSITORY:latest
+
+      - name: Push extra tags
+        if: ${{ GITHUB_REF_TYPE==tag }}
+          docker push $REGISTRY/$REPOSITORY:$IMAGE_TAG
