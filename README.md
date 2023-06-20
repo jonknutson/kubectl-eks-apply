@@ -20,7 +20,7 @@ probably using the configure-aws-credentials action.
 
 ## Example usage
 ```
-uses: jonknutson/kubectl-eks-apply
+uses: jonknutson/kubectl-eks-apply@v2.1.2
 env:
   REGION: us-east-2
   CLUSTER: my-cluster
