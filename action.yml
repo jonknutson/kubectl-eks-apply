@@ -1,6 +1,9 @@
 # action.yml
 name: 'kubectl-eks-apply'
-description: 'Apply all k8s manifest files on an EKS cluster'
+description: 'Run kubectl commands against an EKS cluster'
+branding:
+  icon: 'anchor'
+  color: 'green'
 inputs:
   kubectl-command:
     description: "The arguments to pass to kubectl."
