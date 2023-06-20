@@ -39,7 +39,7 @@ jobs:
           docker tag $REGISTRY/$GITHUB_REPOSITORY:$GITHUB_SHA $REGISTRY/$GITHUB_REPOSITORY:latest
 
       - name: Push container
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        if: ( github.ref == 'refs/heads/main' && github.event_name == 'push' ) || github.event_name == 'workflow_dispatch'
         run : |
           docker push $REGISTRY/$GITHUB_REPOSITORY:$GITHUB_SHA
           docker push $REGISTRY/$GITHUB_REPOSITORY:latest
