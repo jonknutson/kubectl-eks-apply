@@ -6,4 +6,4 @@ CONTEXT=$(aws eks describe-cluster --region $REGION --name $CLUSTER | jq -r .clu
 kubectl config use-context $CONTEXT
 
 echo "Applying the selected manifest files"
-kubectl apply -f $1
+kubectl $1
