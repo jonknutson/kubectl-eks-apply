@@ -12,7 +12,11 @@ probably using the configure-aws-credentials action.
 **Required** The AWS region to use. Default `us-east-2`.
 
 ## `CLUSTER`
-**Required** The name of your EKS cluster.
+**Required** The arguments to pass to kubectl.
+
+## Inputs
+## `kubectl-command`
+**Required** The file or files against which you want to run kubectl apply.
 
 ## Example usage
 ```
