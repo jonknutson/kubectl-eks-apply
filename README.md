@@ -30,3 +30,15 @@ Run all of the manifests in a directory named `k8s-config`
     with:
       kubectl-command: apply -f ./k8s-config
 ```
+
+## Contributions
+### Container updates
+PRs to `main` that affect `Dockerfile` or `entrypoint.sh` will
+generate a new container image.
+
+To tag a new version, push tags, build a container from the 
+tagged commit, and then run the release workflow from the tag workflow.
+
+### Action updates
+If you would like to suggest or make changes to this action,
+please submit an issue or a PR.
