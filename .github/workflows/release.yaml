@@ -1,14 +1,11 @@
-name: CI
+name: Container Release
 
 on:
-  push:
-    tags:
-      - '*'
   workflow_dispatch:
 
 jobs:
   release:
-    name: Tag Release
+    name: Tag Container
     runs-on: ubuntu-22.04
     env:
       CR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
