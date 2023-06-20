@@ -9,21 +9,24 @@ probably using the configure-aws-credentials action.
 
 ## Environment Variables
 ## `REGION`
-**Required** The AWS region to use. Default `us-east-2`.
+**Required** The AWS region in which your cluster lives.
 
 ## `CLUSTER`
-**Required** The arguments to pass to kubectl.
+**Required** The name of the cluster against which to authenticate.
 
 ## Inputs
 ## `kubectl-command`
-**Required** The file or files against which you want to run kubectl apply.
+**Required** The subcommand and arguments to pass to kubectl.
 
 ## Example usage
+Connect to cluster named `xyzdemo` in `us-east-2`.
+Run all of the manifests in a directory named `k8s-config`
 ```
-uses: jonknutson/kubectl-eks-apply@v2.1.2
-env:
-  REGION: us-east-2
-  CLUSTER: my-cluster
-with:
-  args: apply -f manifest_dir
+  - name: Apply Kubernetes Manifests
+    uses: jonknutson/kubectl-eks-apply@v2.1.2
+    env:
+      REGION: us-east-2
+      CLUSTER: xyzdemo
+    with:
+      kubectl-command: apply -f ./k8s-config
 ```
