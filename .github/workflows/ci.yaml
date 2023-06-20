@@ -8,6 +8,7 @@ on:
     types: [opened, synchronize, reopened]
     branches:
       - "main"
+  workflow_dispatch:
 
 jobs:
   build:
@@ -28,21 +29,13 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Build and tag images
+      - name: Build and tag image
         run: |
           docker build -t $REGISTRY/$GITHUB_REPOSITORY:$GITHUB_SHA .
           docker tag $REGISTRY/$GITHUB_REPOSITORY:$GITHUB_SHA $REGISTRY/$GITHUB_REPOSITORY:latest
-
-      - name: Add extra tags
-        if: github.ref_type == 'tag'
-        run: docker tag $REGISTRY/$GITHUB_REPOSITORY:$GITHUB_SHA $REGISTRY/$GITHUB_REPOSITORY:$GITHUB_REF_NAME
 
       - name: Push container
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run : |
           docker push $REGISTRY/$GITHUB_REPOSITORY:$GITHUB_SHA
           docker push $REGISTRY/$GITHUB_REPOSITORY:latest
-
-      - name: Push extra tags
-        if: github.ref_type == 'tag' && github.event_name == 'push'
-        run: docker push $REGISTRY/$GITHUB_REPOSITORY:$GITHUB_REF_NAME
