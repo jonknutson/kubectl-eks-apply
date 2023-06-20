@@ -7,6 +7,6 @@ inputs:
     required: true
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'ghcr.io/jonknutson/kubectl-eks-apply:v2'
   args:
     - ${{ inputs.kubectl-command }}
